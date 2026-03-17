@@ -1,0 +1,38 @@
+# Required GitHub Secrets:
+#   SUPABASE_ACCESS_TOKEN  — Supabase CLI auth (deploy workflows)
+#   SUPABASE_DB_PASSWORD   — Supabase DB password (deploy workflows)
+#   SENTRY_AUTH_TOKEN      — Sentry source map upload (deploy workflows)
+#   SENTRY_ORG             — Sentry organization slug (deploy workflows)
+#   SENTRY_PROJECT_WEB     — Sentry project for web app (deploy workflows)
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'pnpm'
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm build
+
+      - run: pnpm typecheck
+
+      - run: pnpm lint
+
+      - run: pnpm test
+
+      - run: pnpm exec playwright install --with-deps
+
+      - run: pnpm exec playwright test

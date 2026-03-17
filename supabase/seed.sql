@@ -1,0 +1,5 @@
+-- Seed data for local development
+--
+-- Test users are created via Supabase Auth (supabase/config.toml enables email auth).
+-- After `supabase start`, create test users via the Auth UI at http://localhost:54323
+-- or via the management API. The handle_new_user() trigger will auto-create profiles.

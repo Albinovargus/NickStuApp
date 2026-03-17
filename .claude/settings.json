@@ -1,0 +1,33 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "filepath=$(jq -r '.tool_input.file_path') && echo \"$filepath\" | grep -qE '\\.(ts|tsx|js|jsx)$' && npx eslint --fix \"$filepath\" 2>/dev/null || true"
+          }
+        ]
+      },
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "filepath=$(jq -r '.tool_input.file_path') && case \"$filepath\" in */apps/api/*) pnpm --filter @myapp/api typecheck 2>&1 | tail -20;; */apps/web/*) pnpm --filter @myapp/web typecheck 2>&1 | tail -20;; */packages/types/*) pnpm --filter @myapp/types typecheck 2>&1 | tail -20;; esac || true"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "filepath=$(jq -r '.tool_input.file_path') && echo \"$filepath\" | grep -qE '\\.test\\.' && npx vitest --run \"$filepath\" 2>&1 | tail -20 || true"
+          }
+        ]
+      }
+    ]
+  }
+}

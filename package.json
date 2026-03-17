@@ -1,0 +1,23 @@
+{
+  "name": "@myapp/root",
+  "private": true,
+  "packageManager": "pnpm@9.15.4",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "typecheck": "turbo typecheck",
+    "lint": "turbo lint",
+    "test": "turbo test",
+    "cap:sync": "pnpm --filter @myapp/web exec cap sync",
+    "cap:add:ios": "pnpm --filter @myapp/web exec cap add ios",
+    "cap:add:android": "pnpm --filter @myapp/web exec cap add android"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.58.2",
+    "prettier": "^3",
+    "turbo": "^2"
+  }
+}
