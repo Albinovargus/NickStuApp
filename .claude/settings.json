@@ -1,5 +1,19 @@
 {
   "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/init-check.sh"
+          },
+          {
+            "type": "command",
+            "command": ".claude/hooks/build-detector.sh"
+          }
+        ]
+      }
+    ],
     "PostToolUse": [
       {
         "matcher": "Edit|Write",

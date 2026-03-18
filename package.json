@@ -13,7 +13,8 @@
     "test": "turbo test",
     "cap:sync": "pnpm --filter @myapp/web exec cap sync",
     "cap:add:ios": "pnpm --filter @myapp/web exec cap add ios",
-    "cap:add:android": "pnpm --filter @myapp/web exec cap add android"
+    "cap:add:android": "pnpm --filter @myapp/web exec cap add android",
+    "init:project": "npx tsx scripts/init.ts"
   },
   "devDependencies": {
     "@playwright/test": "^1.58.2",

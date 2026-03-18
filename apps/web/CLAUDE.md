@@ -11,9 +11,11 @@ src/features/<name>/
 
 ## Key Rules
 
+- **Mobile-first**: Design for 375px first, then scale up. Every layout, modal, form, and interaction must feel native on a phone. No horizontal scroll, no clipped text, no unreachable controls.
 - **api.ts**: Always `api.get()` / `api.post()` — never raw `fetch()`
 - **dvh**: `h-[100dvh]` always, `h-screen` never — iOS Safari breaks with vh
-- **Touch targets**: `min-h-11` (44px) on all tappable elements
+- **Touch targets**: `min-h-11` (44px) on all tappable elements. Generous padding on interactive elements — thumbs are imprecise.
+- **Safe areas**: Use `env(safe-area-inset-*)` or Capacitor safe area utilities for notched devices. Content must not hide behind system UI.
 - **Supabase**: Only import from `src/lib/supabase.ts` — auth UI flows only, zero data queries
 - **Capacitor hooks**: Always use custom hooks, never import plugins directly in components
 - **Tailwind v4**: All customization in `src/index.css` under `@theme` — no tailwind.config.js
