@@ -1,15 +1,6 @@
----
-name: build
-description: Use when a user describes a new feature, screen, or full-stack capability to build — not for bug fixes, refactors, or simple changes
----
-
 # /build
 
-Transforms a casual feature request into a structured full-stack development session.
-
-## Overview
-
-Orchestrates the full lifecycle of feature development: parallel codebase research, interactive spec refinement, gap analysis, context-chunked planning, and verified implementation. Every phase gates on the previous one — no skipping ahead.
+Transforms a casual feature request into a structured full-stack development session. Orchestrates: parallel codebase research, interactive spec refinement, gap analysis, context-chunked planning, and verified implementation. Every phase gates on the previous one.
 
 ## Usage
 ```
