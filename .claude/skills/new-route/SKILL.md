@@ -1,3 +1,10 @@
+---
+name: new-route
+description: Adds a new route to an existing Fastify plugin with schema, service method, and tests
+disable-model-invocation: true
+argument-hint: <METHOD> <path>
+---
+
 # /new-route
 
 Adds a new route to an existing Fastify plugin.

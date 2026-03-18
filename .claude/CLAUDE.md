@@ -95,6 +95,6 @@ See `docs/decisions/` for rationale:
 - `001-monorepo-structure.md` — Why pnpm + Turborepo
 - `002-proxy-boundary.md` — Why frontend never touches Supabase directly
 - `003-hash-routing.md` — Why createHashRouter for Capacitor
-- `004-deployment-targets.md` — Why Vercel + Railway, graduation paths
+- `004-deployment-targets.md` — Why GitHub Pages + Railway (via Actions), graduation paths
 
 ## Scope: @myapp

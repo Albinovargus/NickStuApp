@@ -37,19 +37,56 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Railway deploys tagged releases via environment promotion
-      # or manual trigger from the Railway dashboard
-      - run: echo "API deployment triggered by tag ${{ github.ref_name }}"
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'pnpm'
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm --filter @myapp/api build
+
+      - run: npm install -g @railway/cli
+
+      - run: railway up --service ${{ secrets.RAILWAY_SERVICE_ID }} --environment production
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
 
   deploy-web:
     runs-on: ubuntu-latest
     needs: [validate]
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
 
-      # Vercel production deployment triggered by tag
-      # Configure in Vercel project settings: Production Branch = tag pattern
-      - run: echo "Web deployment triggered by tag ${{ github.ref_name }}"
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'pnpm'
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm --filter @myapp/web build
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT_WEB }}
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: apps/web/dist
+
+      - id: deploy
+        uses: actions/deploy-pages@v4
 
   migrate:
     runs-on: ubuntu-latest

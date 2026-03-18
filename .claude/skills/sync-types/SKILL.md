@@ -1,3 +1,9 @@
+---
+name: sync-types
+description: Verifies API response shapes match shared Zod schemas and checks for stale re-exports
+disable-model-invocation: true
+---
+
 # /sync-types
 
 Verifies API response shapes match shared Zod schemas.

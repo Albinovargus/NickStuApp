@@ -1,4 +1,6 @@
 # Required GitHub Secrets:
+#   RAILWAY_TOKEN          — Railway CLI deploy token (deploy workflows)
+#   RAILWAY_SERVICE_ID     — Railway service ID (deploy workflows)
 #   SUPABASE_ACCESS_TOKEN  — Supabase CLI auth (deploy workflows)
 #   SUPABASE_DB_PASSWORD   — Supabase DB password (deploy workflows)
 #   SENTRY_AUTH_TOKEN      — Sentry source map upload (deploy workflows)

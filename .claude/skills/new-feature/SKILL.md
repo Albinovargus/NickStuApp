@@ -1,3 +1,10 @@
+---
+name: new-feature
+description: Scaffolds a new feature following the three-file pattern (schema + plugin + service + frontend feature folder)
+disable-model-invocation: true
+argument-hint: <feature-name>
+---
+
 # /new-feature
 
 Creates a new feature following the three-file pattern.

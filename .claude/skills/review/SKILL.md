@@ -1,3 +1,9 @@
+---
+name: review
+description: Reviews the current diff for pattern violations and common issues. Use when checking code quality before committing.
+disable-model-invocation: true
+---
+
 # /review
 
 Reviews the current diff for pattern violations and common issues.

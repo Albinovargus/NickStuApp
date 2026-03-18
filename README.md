@@ -777,11 +777,15 @@ After any code change, this loop runs before committing:
 
 | Secret | Purpose | Where to get it |
 |--------|---------|----------------|
+| `RAILWAY_TOKEN` | Railway CLI deploy token | [railway.app](https://railway.app) → Project → Settings → Tokens |
+| `RAILWAY_SERVICE_ID` | Railway service to deploy to | [railway.app](https://railway.app) → Project → Service → Settings |
 | `SUPABASE_ACCESS_TOKEN` | Supabase CLI auth for migrations | [supabase.com/dashboard](https://supabase.com/dashboard) → Settings → Access Tokens |
 | `SUPABASE_DB_PASSWORD` | Supabase DB password for migrations | [supabase.com/dashboard](https://supabase.com/dashboard) → Settings → Database |
 | `SENTRY_AUTH_TOKEN` | Source map upload | [sentry.io](https://sentry.io) → Settings → Auth Tokens |
 | `SENTRY_ORG` | Sentry organization slug | [sentry.io](https://sentry.io) → Settings → Organization |
 | `SENTRY_PROJECT_WEB` | Sentry project for web app | [sentry.io](https://sentry.io) → Projects |
+
+> **Important**: Disable Railway's auto-deploy from branch pushes in your Railway project settings. All deploys are triggered explicitly by GitHub Actions using `railway up`.
 
 ## Adding a New Feature
 
