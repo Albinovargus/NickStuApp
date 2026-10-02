@@ -6,6 +6,8 @@ type RuleEvaluators = { [T in PileRule['type']]: (card: SortCard, rule: RuleOf<T
 // One evaluator per rule type. Adding a rule to PileRuleSchema fails typecheck until it is handled here.
 const evaluators: RuleEvaluators = {
   'matches-shape': (card, rule) => card.kind === 'shape' && card.shape === rule.shape,
+  'matches-suit': (card, rule) => card.kind === 'playing' && card.suit === rule.suit,
+  'matches-animal-group': (card, rule) => card.kind === 'animal' && card.group === rule.group,
 };
 
 export function evaluateRule(card: SortCard, rule: PileRule): boolean {

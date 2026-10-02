@@ -12,7 +12,37 @@ export const ShapeCardSchema = z.object({
 });
 export type ShapeCard = z.infer<typeof ShapeCardSchema>;
 
-export const SortCardSchema = z.discriminatedUnion('kind', [ShapeCardSchema]);
+export const SuitSchema = z.enum(['hearts', 'diamonds', 'clubs', 'spades']);
+export type Suit = z.infer<typeof SuitSchema>;
+
+export const RankSchema = z.enum(['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']);
+export type Rank = z.infer<typeof RankSchema>;
+
+export const PlayingCardSchema = z.object({
+  kind: z.literal('playing'),
+  id: z.string().min(1),
+  suit: SuitSchema,
+  rank: RankSchema,
+});
+export type PlayingCard = z.infer<typeof PlayingCardSchema>;
+
+export const AnimalGroupSchema = z.enum(['mammal', 'bird', 'fish', 'reptile']);
+export type AnimalGroup = z.infer<typeof AnimalGroupSchema>;
+
+export const AnimalCardSchema = z.object({
+  kind: z.literal('animal'),
+  id: z.string().min(1),
+  name: z.string().min(1),
+  emoji: z.string().min(1),
+  group: AnimalGroupSchema,
+});
+export type AnimalCard = z.infer<typeof AnimalCardSchema>;
+
+export const SortCardSchema = z.discriminatedUnion('kind', [
+  ShapeCardSchema,
+  PlayingCardSchema,
+  AnimalCardSchema,
+]);
 export type SortCard = z.infer<typeof SortCardSchema>;
 
 // Pile rules are a discriminated union on `type` — add new rules as new members.
@@ -22,7 +52,23 @@ export const MatchesShapeRuleSchema = z.object({
 });
 export type MatchesShapeRule = z.infer<typeof MatchesShapeRuleSchema>;
 
-export const PileRuleSchema = z.discriminatedUnion('type', [MatchesShapeRuleSchema]);
+export const MatchesSuitRuleSchema = z.object({
+  type: z.literal('matches-suit'),
+  suit: SuitSchema,
+});
+export type MatchesSuitRule = z.infer<typeof MatchesSuitRuleSchema>;
+
+export const MatchesAnimalGroupRuleSchema = z.object({
+  type: z.literal('matches-animal-group'),
+  group: AnimalGroupSchema,
+});
+export type MatchesAnimalGroupRule = z.infer<typeof MatchesAnimalGroupRuleSchema>;
+
+export const PileRuleSchema = z.discriminatedUnion('type', [
+  MatchesShapeRuleSchema,
+  MatchesSuitRuleSchema,
+  MatchesAnimalGroupRuleSchema,
+]);
 export type PileRule = z.infer<typeof PileRuleSchema>;
 
 export const SortPileSchema = z.object({

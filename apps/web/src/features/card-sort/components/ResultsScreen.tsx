@@ -13,6 +13,8 @@ import { computeStats } from '../engine/stats.js';
 interface ResultsScreenProps {
   result: CardSortResult;
   piles: SortPile[];
+  /** e.g. pack name and mode, shown under the heading. */
+  subtitle?: string;
   onPlayAgain: () => void;
 }
 
@@ -28,12 +30,15 @@ function Stat({ label, value }: { label: string; value: string }) {
   );
 }
 
-export function ResultsScreen({ result, piles, onPlayAgain }: ResultsScreenProps) {
+export function ResultsScreen({ result, piles, subtitle, onPlayAgain }: ResultsScreenProps) {
   const stats = computeStats(result, piles);
 
   return (
     <div className="mx-auto flex max-w-2xl flex-col gap-6 py-4">
-      <h1 className="text-center text-2xl font-bold">Results</h1>
+      <div className="text-center">
+        <h1 className="text-2xl font-bold">Results</h1>
+        {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
+      </div>
 
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
         <Stat label="First-try accuracy" value={formatPercent(stats.accuracy)} />

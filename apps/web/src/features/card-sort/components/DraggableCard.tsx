@@ -21,6 +21,7 @@ export function DraggableCard({ card, shakeKey }: DraggableCardProps) {
       {...attributes}
       aria-label="Card to sort"
       data-testid="active-card"
+      data-card-id={card.id}
       className={cn('cursor-grab touch-none select-none', isDragging && 'opacity-0')}
     >
       <div key={shakeKey ?? 0} className={cn(shakeKey !== null && 'animate-shake')}>

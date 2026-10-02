@@ -38,9 +38,42 @@ describe('SortCardSchema', () => {
   });
 });
 
+describe('SortCardSchema (playing)', () => {
+  it('parses a playing card', () => {
+    expect(() => SortCardSchema.parse({ kind: 'playing', id: 'hearts-7', suit: 'hearts', rank: '7' })).not.toThrow();
+  });
+
+  it('rejects an unknown suit or rank', () => {
+    expect(() => SortCardSchema.parse({ kind: 'playing', id: 'x', suit: 'cups', rank: '7' })).toThrow();
+    expect(() => SortCardSchema.parse({ kind: 'playing', id: 'x', suit: 'hearts', rank: '1' })).toThrow();
+  });
+});
+
+describe('SortCardSchema (animal)', () => {
+  const whale = { kind: 'animal', id: 'mammal-whale', name: 'Whale', emoji: '🐋', group: 'mammal' };
+
+  it('parses an animal card', () => {
+    expect(() => SortCardSchema.parse(whale)).not.toThrow();
+  });
+
+  it('rejects an unknown group or missing emoji', () => {
+    expect(() => SortCardSchema.parse({ ...whale, group: 'insect' })).toThrow();
+    expect(() => SortCardSchema.parse({ ...whale, emoji: '' })).toThrow();
+  });
+});
+
 describe('PileRuleSchema', () => {
   it('parses matches-shape', () => {
     expect(() => PileRuleSchema.parse({ type: 'matches-shape', shape: 'star' })).not.toThrow();
+  });
+
+  it('parses matches-suit and matches-animal-group', () => {
+    expect(() => PileRuleSchema.parse({ type: 'matches-suit', suit: 'spades' })).not.toThrow();
+    expect(() => PileRuleSchema.parse({ type: 'matches-animal-group', group: 'bird' })).not.toThrow();
+  });
+
+  it('rejects a rule with the wrong field for its type', () => {
+    expect(() => PileRuleSchema.parse({ type: 'matches-suit', shape: 'star' })).toThrow();
   });
 
   it('rejects an unknown rule type', () => {

@@ -1,10 +1,13 @@
 import { describe, it, expect } from 'vitest';
-import type { CardSortConfig, CardSortResult } from '@myapp/types';
+import { CardSortConfigSchema, type CardSortConfig, type CardSortResult, type SortPile } from '@myapp/types';
 import { isCorrectPlacement } from '../engine/rules.js';
 import { shuffle } from '../engine/deck.js';
 import { initialSessionState, sessionReducer, type SessionState } from '../engine/session.js';
 import { computeStats } from '../engine/stats.js';
 import { basicShapesConfig } from '../configs/basic-shapes.js';
+import { playingCardsConfig } from '../configs/playing-cards.js';
+import { animalsConfig } from '../configs/animals.js';
+import { cardPacks } from '../configs/packs.js';
 
 function makeConfig(wrongPlacement: CardSortConfig['wrongPlacement']): CardSortConfig {
   return {
@@ -166,6 +169,63 @@ describe('basicShapesConfig', () => {
     const config = basicShapesConfig('accept');
     for (const card of config.cards) {
       expect(config.piles.filter((pile) => isCorrectPlacement(card, pile))).toHaveLength(1);
+    }
+  });
+});
+
+describe('rules for playing cards and animals', () => {
+  const sevenOfHearts = { kind: 'playing', id: 'hearts-7', suit: 'hearts', rank: '7' } as const;
+  const whale = { kind: 'animal', id: 'mammal-whale', name: 'Whale', emoji: '🐋', group: 'mammal' } as const;
+  const pile = (rule: SortPile['rule']): SortPile => ({ id: 'p', label: 'P', rule });
+
+  it('matches-suit compares the suit', () => {
+    expect(isCorrectPlacement(sevenOfHearts, pile({ type: 'matches-suit', suit: 'hearts' }))).toBe(true);
+    expect(isCorrectPlacement(sevenOfHearts, pile({ type: 'matches-suit', suit: 'diamonds' }))).toBe(false);
+  });
+
+  it('matches-animal-group compares the group', () => {
+    expect(isCorrectPlacement(whale, pile({ type: 'matches-animal-group', group: 'mammal' }))).toBe(true);
+    expect(isCorrectPlacement(whale, pile({ type: 'matches-animal-group', group: 'fish' }))).toBe(false);
+  });
+
+  it('a rule never matches a card of a different kind', () => {
+    expect(isCorrectPlacement(whale, pile({ type: 'matches-suit', suit: 'hearts' }))).toBe(false);
+    expect(isCorrectPlacement(sevenOfHearts, pile({ type: 'matches-shape', shape: 'circle' }))).toBe(false);
+  });
+});
+
+describe('card packs', () => {
+  it.each(cardPacks.map((pack) => [pack.id, pack] as const))(
+    '%s: valid config where every card has exactly one correct pile',
+    (_id, pack) => {
+      const config = CardSortConfigSchema.parse(pack.build('reject'));
+      expect(config.id).toBe(pack.id);
+      expect(config.wrongPlacement).toBe('reject');
+      expect(new Set(config.cards.map((c) => c.id)).size).toBe(config.cards.length);
+      for (const card of config.cards) {
+        expect(config.piles.filter((p) => isCorrectPlacement(card, p))).toHaveLength(1);
+      }
+    },
+  );
+
+  it('playing cards: 16 cards, 4 of each suit', () => {
+    const { cards } = playingCardsConfig('accept');
+    expect(cards).toHaveLength(16);
+    for (const suit of ['hearts', 'diamonds', 'clubs', 'spades']) {
+      expect(cards.filter((c) => c.kind === 'playing' && c.suit === suit)).toHaveLength(4);
+    }
+  });
+
+  it('playing cards: deal is deterministic for a fixed random source', () => {
+    const ids = (random: () => number) => playingCardsConfig('accept', random).cards.map((c) => c.id);
+    expect(ids(() => 0.42)).toEqual(ids(() => 0.42));
+  });
+
+  it('animals: 16 cards, 4 per group', () => {
+    const { cards } = animalsConfig('accept');
+    expect(cards).toHaveLength(16);
+    for (const group of ['mammal', 'bird', 'fish', 'reptile']) {
+      expect(cards.filter((c) => c.kind === 'animal' && c.group === group)).toHaveLength(4);
     }
   });
 });
