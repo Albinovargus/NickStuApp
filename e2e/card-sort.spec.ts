@@ -56,6 +56,31 @@ test('bounce-back mode: wrong drop keeps the card in play', async ({ page }) => 
   await expect(page.getByText('Wrong drops').locator('..')).toContainText('1');
 });
 
+test('bounce-back mode: only the rejected card shakes, and only once', async ({ page }) => {
+  await page.goto('/#/modules/card-sort');
+  await page.getByRole('tab', { name: 'Bounce back' }).click();
+  await page.getByRole('button', { name: 'Start' }).click();
+  const isShaking = () => page.getByTestId('active-card').locator('.animate-shake').count();
+
+  const shape = await activeShape(page);
+  await dragActiveCardTo(page, shape === 'circle' ? 'pile-pile-star' : 'pile-pile-circle');
+  expect(await isShaking()).toBe(1);
+
+  // Dropping on empty space (no pile) must not replay the shake.
+  const card = await page.getByTestId('active-card').boundingBox();
+  if (!card) throw new Error('card missing');
+  await page.mouse.move(card.x + card.width / 2, card.y + card.height / 2);
+  await page.mouse.down();
+  await page.mouse.move(card.x + card.width / 2 + 30, card.y + 10, { steps: 6 });
+  await page.mouse.up();
+  expect(await isShaking()).toBe(0);
+
+  // The next card must not inherit the shake.
+  await dragActiveCardTo(page, `pile-pile-${shape}`);
+  await expect(page.getByText('1 / 12 sorted')).toBeVisible();
+  expect(await isShaking()).toBe(0);
+});
+
 test('holding a card at the screen edges does not scroll or grow the page', async ({ page }) => {
   await page.goto('/#/modules/card-sort');
   await page.getByRole('button', { name: 'Start' }).click();

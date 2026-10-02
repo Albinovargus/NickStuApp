@@ -5,8 +5,8 @@ import { CardView } from './CardView.js';
 
 interface DraggableCardProps {
   card: SortCard;
-  /** Changing this replays the "wrong pile" shake animation. */
-  shakeKey: number;
+  /** Non-null plays the "wrong pile" shake; a new value replays it. */
+  shakeKey: number | null;
 }
 
 // The card stays in place while dragging; CardSortBoard renders the moving copy in a
@@ -23,7 +23,7 @@ export function DraggableCard({ card, shakeKey }: DraggableCardProps) {
       data-testid="active-card"
       className={cn('cursor-grab touch-none select-none', isDragging && 'opacity-0')}
     >
-      <div key={shakeKey} className={cn(shakeKey > 0 && !isDragging && 'animate-shake')}>
+      <div key={shakeKey ?? 0} className={cn(shakeKey !== null && 'animate-shake')}>
         <CardView card={card} />
       </div>
     </div>

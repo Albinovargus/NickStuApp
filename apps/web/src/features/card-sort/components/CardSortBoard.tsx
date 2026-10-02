@@ -25,7 +25,8 @@ interface CardSortBoardProps {
 
 export function CardSortBoard({ config, deck, piles, onPlace }: CardSortBoardProps) {
   const [feedback, setFeedback] = useState<{ pileId: string; result: PileFeedback } | null>(null);
-  const [shakeKey, setShakeKey] = useState(0);
+  // The card that was just rejected; `key` changes on each rejection to replay the shake.
+  const [shake, setShake] = useState<{ cardId: string; key: number } | null>(null);
   const [draggingId, setDraggingId] = useState<string | null>(null);
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 4 } }),
@@ -42,7 +43,10 @@ export function CardSortBoard({ config, deck, piles, onPlace }: CardSortBoardPro
   const draggingCard = config.cards.find((card) => card.id === draggingId);
   const sortedCount = config.cards.length - deck.length;
 
-  const handleDragStart = ({ active }: DragStartEvent) => setDraggingId(String(active.id));
+  const handleDragStart = ({ active }: DragStartEvent) => {
+    setDraggingId(String(active.id));
+    setShake(null);
+  };
 
   const handleDragEnd = ({ active, over }: DragEndEvent) => {
     setDraggingId(null);
@@ -50,7 +54,9 @@ export function CardSortBoard({ config, deck, piles, onPlace }: CardSortBoardPro
     const correct = onPlace(String(active.id), String(over.id));
     if (correct === null) return;
     setFeedback({ pileId: String(over.id), result: correct ? 'correct' : 'wrong' });
-    if (!correct && config.wrongPlacement === 'reject') setShakeKey((key) => key + 1);
+    if (!correct && config.wrongPlacement === 'reject') {
+      setShake((prev) => ({ cardId: String(active.id), key: (prev?.key ?? 0) + 1 }));
+    }
   };
 
   return (
@@ -68,7 +74,13 @@ export function CardSortBoard({ config, deck, piles, onPlace }: CardSortBoardPro
         </p>
 
         <div className="flex flex-1 items-center justify-center py-2">
-          {activeCard && <DraggableCard key={activeCard.id} card={activeCard} shakeKey={shakeKey} />}
+          {activeCard && (
+            <DraggableCard
+              key={activeCard.id}
+              card={activeCard}
+              shakeKey={shake?.cardId === activeCard.id ? shake.key : null}
+            />
+          )}
         </div>
 
         <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
@@ -84,8 +96,8 @@ export function CardSortBoard({ config, deck, piles, onPlace }: CardSortBoardPro
       </div>
 
       {/* Fixed-position layer for the card being dragged, so it can't grow the scroll area.
-          Its drop animation returns the card to its slot when it stays in play (reject mode). */}
-      <DragOverlay>{draggingCard ? <CardView card={draggingCard} /> : null}</DragOverlay>
+          No drop animation: while it runs, dnd-kit ignores drops from a quick re-grab. */}
+      <DragOverlay dropAnimation={null}>{draggingCard ? <CardView card={draggingCard} /> : null}</DragOverlay>
     </DndContext>
   );
 }
