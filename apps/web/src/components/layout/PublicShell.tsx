@@ -1,5 +1,6 @@
 import { Link, Outlet, useLocation } from 'react-router';
 import { ChevronLeft } from 'lucide-react';
+import { ThemeToggle } from './ThemeToggle.js';
 
 export function PublicShell() {
   const { pathname } = useLocation();
@@ -18,6 +19,9 @@ export function PublicShell() {
           </Link>
         )}
         <span className={isHome ? 'px-2 text-lg font-semibold' : 'text-lg font-semibold'}>MyApp</span>
+        <div className="ml-auto">
+          <ThemeToggle />
+        </div>
       </header>
       <main className="flex-1 overflow-y-auto p-4">
         <Outlet />

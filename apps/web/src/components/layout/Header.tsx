@@ -1,5 +1,6 @@
 import { useAuth } from '../../hooks/useAuth.js';
 import { Button } from '../ui/button.js';
+import { ThemeToggle } from './ThemeToggle.js';
 
 export function Header() {
   const { user, signOut } = useAuth();
@@ -9,6 +10,7 @@ export function Header() {
       <div />
       <div className="flex items-center gap-4">
         <span className="text-sm text-muted-foreground">{user?.email}</span>
+        <ThemeToggle />
         <Button variant="ghost" size="sm" onClick={() => signOut()}>
           Sign out
         </Button>

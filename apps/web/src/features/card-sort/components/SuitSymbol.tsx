@@ -11,7 +11,7 @@ export const SUIT_SYMBOLS: Record<Suit, string> = {
 const RED_SUITS: ReadonlySet<Suit> = new Set(['hearts', 'diamonds']);
 
 export function suitColorClass(suit: Suit): string {
-  return RED_SUITS.has(suit) ? 'text-red-600' : 'text-neutral-900';
+  return RED_SUITS.has(suit) ? 'text-red-600 dark:text-red-400' : 'text-foreground';
 }
 
 export function SuitSymbol({ suit, className }: { suit: Suit; className?: string }) {

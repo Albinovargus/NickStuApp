@@ -54,7 +54,7 @@ export function PileDropZone({ pile, count, feedback }: PileDropZoneProps) {
       className={cn(
         'flex min-h-32 flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-border p-3 transition-colors',
         isOver && !feedback && 'border-primary bg-primary/5',
-        feedback === 'correct' && 'border-green-600 bg-green-600/10',
+        feedback === 'correct' && 'border-green-600 bg-green-600/10 dark:border-green-500 dark:bg-green-500/15',
         feedback === 'wrong' && 'border-destructive bg-destructive/10',
       )}
     >
