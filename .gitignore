@@ -12,3 +12,5 @@ supabase/.temp/
 
 # Playwright MCP browser-testing artifacts
 .playwright-mcp/
+test-results/
+playwright-report/

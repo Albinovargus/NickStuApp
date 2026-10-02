@@ -1,5 +1,5 @@
 import { vi, describe, it, expect } from 'vitest';
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 
 vi.mock('@/lib/supabase.js', () => ({
   supabase: {
@@ -30,5 +30,11 @@ describe('App', () => {
   it('renders without crashing', () => {
     const { container } = render(<App />);
     expect(container).toBeTruthy();
+  });
+
+  it('renders the public modules home', async () => {
+    render(<App />);
+    expect(await screen.findByRole('heading', { name: 'Modules' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /card sort/i })).toBeInTheDocument();
   });
 });

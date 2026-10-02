@@ -1,4 +1,4 @@
-import { defineConfig } from '@playwright/test';
+import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
   testDir: './e2e',
@@ -11,16 +11,18 @@ export default defineConfig({
     baseURL: 'http://localhost:5173',
     trace: 'on-first-retry',
   },
-  webServer: [
+  projects: [
+    { name: 'phone', use: { ...devices['Pixel 7'] } },
     {
-      command: 'pnpm --filter @myapp/api dev',
-      port: 3000,
-      reuseExistingServer: !process.env['CI'],
-    },
-    {
-      command: 'pnpm --filter @myapp/web dev',
-      port: 5173,
-      reuseExistingServer: !process.env['CI'],
+      name: 'tablet',
+      use: { ...devices['Desktop Chrome'], viewport: { width: 820, height: 1180 }, hasTouch: true },
     },
   ],
+  // Web only: the public modules don't need the API. Add the API server back
+  // here when an e2e test exercises it.
+  webServer: {
+    command: 'pnpm --filter @myapp/web dev',
+    port: 5173,
+    reuseExistingServer: !process.env['CI'],
+  },
 });

@@ -5,6 +5,9 @@ import tailwindcss from '@tailwindcss/vite';
 import { sentryVitePlugin } from '@sentry/vite-plugin';
 
 export default defineConfig({
+  // Relative asset paths so the same build works on GitHub Pages (/NickStuApp/)
+  // and inside Capacitor. Hash routing means no server rewrites are needed.
+  base: './',
   plugins: [
     react(),
     tailwindcss(),
