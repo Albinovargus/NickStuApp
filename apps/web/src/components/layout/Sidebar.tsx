@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router';
 
-const navItems = [{ path: '/', label: 'Dashboard' }];
+const navItems = [{ path: '/dashboard', label: 'Dashboard' }];
 
 export function Sidebar() {
   const location = useLocation();

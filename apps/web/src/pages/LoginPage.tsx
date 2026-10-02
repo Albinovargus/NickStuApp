@@ -13,7 +13,7 @@ export function LoginPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (session) navigate('/');
+    if (session) navigate('/dashboard');
   }, [session, navigate]);
 
   if (session) return null;
@@ -28,7 +28,7 @@ export function LoginPage() {
       } else {
         await signIn(email, password);
       }
-      navigate('/');
+      navigate('/dashboard');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Authentication failed');
     } finally {

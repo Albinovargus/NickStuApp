@@ -38,3 +38,28 @@ export type {
 
 export { UploadResultSchema } from './upload.schema.js';
 export type { UploadResult } from './upload.schema.js';
+
+export {
+  ShapeSchema,
+  ShapeCardSchema,
+  SortCardSchema,
+  MatchesShapeRuleSchema,
+  PileRuleSchema,
+  SortPileSchema,
+  WrongPlacementModeSchema,
+  CardSortConfigSchema,
+  SortPlacementSchema,
+  CardSortResultSchema,
+} from './card-sort.schema.js';
+export type {
+  Shape,
+  ShapeCard,
+  SortCard,
+  MatchesShapeRule,
+  PileRule,
+  SortPile,
+  WrongPlacementMode,
+  CardSortConfig,
+  SortPlacement,
+  CardSortResult,
+} from './card-sort.schema.js';

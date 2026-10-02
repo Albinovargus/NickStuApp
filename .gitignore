@@ -9,3 +9,6 @@ android/
 supabase/.temp/
 *.tsbuildinfo
 .DS_Store
+
+# Playwright MCP browser-testing artifacts
+.playwright-mcp/

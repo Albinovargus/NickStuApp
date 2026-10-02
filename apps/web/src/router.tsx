@@ -1,20 +1,30 @@
 import { createHashRouter } from 'react-router';
-import { AppShell } from './components/layout/AppShell.js';
-import { LoginPage } from './pages/LoginPage.js';
-import { DashboardPage } from './pages/DashboardPage.js';
+import { PublicShell } from './components/layout/PublicShell.js';
+import { ModulesHomePage } from './pages/ModulesHomePage.js';
+import { CardSortPage } from './pages/CardSortPage.js';
 
+// Auth routes are lazy-loaded so the public modules never import Supabase
+// (lib/supabase.ts throws at import time when its env vars are missing).
 export const router = createHashRouter([
   {
-    path: '/login',
-    element: <LoginPage />,
+    path: '/',
+    element: <PublicShell />,
+    children: [
+      { index: true, element: <ModulesHomePage /> },
+      { path: 'modules/card-sort', element: <CardSortPage /> },
+    ],
   },
   {
-    path: '/',
-    element: <AppShell />,
+    path: '/login',
+    lazy: async () => ({ Component: (await import('./pages/LoginPage.js')).LoginPage }),
+  },
+  {
+    path: '/dashboard',
+    lazy: async () => ({ Component: (await import('./components/layout/AppShell.js')).AppShell }),
     children: [
       {
         index: true,
-        element: <DashboardPage />,
+        lazy: async () => ({ Component: (await import('./pages/DashboardPage.js')).DashboardPage }),
       },
     ],
   },
