@@ -1,13 +1,16 @@
 import { useEffect, useState } from 'react';
 import {
   DndContext,
+  DragOverlay,
   KeyboardSensor,
   PointerSensor,
   useSensor,
   useSensors,
   type DragEndEvent,
+  type DragStartEvent,
 } from '@dnd-kit/core';
 import type { CardSortConfig } from '@myapp/types';
+import { CardView } from './CardView.js';
 import { DraggableCard } from './DraggableCard.js';
 import { PileDropZone, type PileFeedback } from './PileDropZone.js';
 
@@ -23,6 +26,7 @@ interface CardSortBoardProps {
 export function CardSortBoard({ config, deck, piles, onPlace }: CardSortBoardProps) {
   const [feedback, setFeedback] = useState<{ pileId: string; result: PileFeedback } | null>(null);
   const [shakeKey, setShakeKey] = useState(0);
+  const [draggingId, setDraggingId] = useState<string | null>(null);
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 4 } }),
     useSensor(KeyboardSensor),
@@ -35,9 +39,13 @@ export function CardSortBoard({ config, deck, piles, onPlace }: CardSortBoardPro
   }, [feedback]);
 
   const activeCard = config.cards.find((card) => card.id === deck[0]);
+  const draggingCard = config.cards.find((card) => card.id === draggingId);
   const sortedCount = config.cards.length - deck.length;
 
+  const handleDragStart = ({ active }: DragStartEvent) => setDraggingId(String(active.id));
+
   const handleDragEnd = ({ active, over }: DragEndEvent) => {
+    setDraggingId(null);
     if (!over) return;
     const correct = onPlace(String(active.id), String(over.id));
     if (correct === null) return;
@@ -46,7 +54,14 @@ export function CardSortBoard({ config, deck, piles, onPlace }: CardSortBoardPro
   };
 
   return (
-    <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
+    // autoScroll off: the board fits on screen, and scrolling while dragging made the view jump.
+    <DndContext
+      sensors={sensors}
+      autoScroll={false}
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+      onDragCancel={() => setDraggingId(null)}
+    >
       <div className="flex h-full flex-col gap-4">
         <p className="text-center text-sm text-muted-foreground" aria-live="polite">
           {sortedCount} / {config.cards.length} sorted
@@ -67,6 +82,10 @@ export function CardSortBoard({ config, deck, piles, onPlace }: CardSortBoardPro
           ))}
         </div>
       </div>
+
+      {/* Fixed-position layer for the card being dragged, so it can't grow the scroll area.
+          Its drop animation returns the card to its slot when it stays in play (reject mode). */}
+      <DragOverlay>{draggingCard ? <CardView card={draggingCard} /> : null}</DragOverlay>
     </DndContext>
   );
 }

@@ -9,8 +9,10 @@ interface DraggableCardProps {
   shakeKey: number;
 }
 
+// The card stays in place while dragging; CardSortBoard renders the moving copy in a
+// DragOverlay so it never grows the scroll container.
 export function DraggableCard({ card, shakeKey }: DraggableCardProps) {
-  const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({ id: card.id });
+  const { attributes, listeners, setNodeRef, isDragging } = useDraggable({ id: card.id });
 
   return (
     <div
@@ -19,11 +21,7 @@ export function DraggableCard({ card, shakeKey }: DraggableCardProps) {
       {...attributes}
       aria-label="Card to sort"
       data-testid="active-card"
-      style={transform ? { transform: `translate3d(${transform.x}px, ${transform.y}px, 0)` } : undefined}
-      className={cn(
-        'relative z-10 cursor-grab touch-none select-none',
-        isDragging && 'cursor-grabbing scale-105 shadow-xl',
-      )}
+      className={cn('cursor-grab touch-none select-none', isDragging && 'opacity-0')}
     >
       <div key={shakeKey} className={cn(shakeKey > 0 && !isDragging && 'animate-shake')}>
         <CardView card={card} />

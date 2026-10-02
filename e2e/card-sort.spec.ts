@@ -56,6 +56,40 @@ test('bounce-back mode: wrong drop keeps the card in play', async ({ page }) => 
   await expect(page.getByText('Wrong drops').locator('..')).toContainText('1');
 });
 
+test('holding a card at the screen edges does not scroll or grow the page', async ({ page }) => {
+  await page.goto('/#/modules/card-sort');
+  await page.getByRole('button', { name: 'Start' }).click();
+
+  const viewport = page.viewportSize();
+  const card = await page.getByTestId('active-card').boundingBox();
+  if (!viewport || !card) throw new Error('viewport or card missing');
+  const cx = card.x + card.width / 2;
+  const cy = card.y + card.height / 2;
+  const edges = [
+    [viewport.width - 2, cy],
+    [cx, viewport.height - 2],
+    [2, cy],
+    [cx, 2],
+  ] as const;
+
+  for (const [x, y] of edges) {
+    await page.mouse.move(cx, cy);
+    await page.mouse.down();
+    await page.mouse.move(x, y, { steps: 12 });
+    await page.waitForTimeout(500); // give auto-scroll time to kick in if it would
+    const scroll = await page.evaluate(() => {
+      const main = document.querySelector('main')!;
+      return {
+        scroll: [main.scrollLeft, main.scrollTop],
+        overflowX: main.scrollWidth - main.clientWidth,
+      };
+    });
+    await page.mouse.move(cx, cy, { steps: 6 });
+    await page.mouse.up();
+    expect(scroll, `holding at (${x}, ${y})`).toEqual({ scroll: [0, 0], overflowX: 0 });
+  }
+});
+
 test('no horizontal overflow', async ({ page }) => {
   await page.goto('/#/modules/card-sort');
   await page.getByRole('button', { name: 'Start' }).click();
