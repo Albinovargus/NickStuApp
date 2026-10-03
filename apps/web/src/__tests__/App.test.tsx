@@ -36,5 +36,6 @@ describe('App', () => {
     render(<App />);
     expect(await screen.findByRole('heading', { name: 'Modules' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /card sort/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /memory match/i })).toBeInTheDocument();
   });
 });
