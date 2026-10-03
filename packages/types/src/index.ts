@@ -77,3 +77,18 @@ export type {
   SortPlacement,
   CardSortResult,
 } from './card-sort.schema.js';
+
+export {
+  MemoryBoardSizeSchema,
+  MemoryCardSchema,
+  MemoryMatchConfigSchema,
+  MemoryFlipSchema,
+  MemoryMatchResultSchema,
+} from './memory-match.schema.js';
+export type {
+  MemoryBoardSize,
+  MemoryCard,
+  MemoryMatchConfig,
+  MemoryFlip,
+  MemoryMatchResult,
+} from './memory-match.schema.js';
