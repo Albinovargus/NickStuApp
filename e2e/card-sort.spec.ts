@@ -63,7 +63,12 @@ for (const pack of ['Playing cards', 'Animals']) {
 test('play again keeps the chosen pack and mode', async ({ page }) => {
   await startRound(page, { pack: 'Animals', mode: 'Bounce back' });
   await sortRemainingCorrectly(page);
-  await page.getByRole('button', { name: 'Play again' }).click();
+  // dnd-kit swallows document clicks for 50ms after a drop, so a click straight after the
+  // last drag can be lost; retry until the start screen is back.
+  await expect(async () => {
+    await page.getByRole('button', { name: 'Play again' }).click({ timeout: 1000 });
+    await expect(page.getByRole('tab', { name: 'Animals' })).toBeVisible({ timeout: 500 });
+  }).toPass();
   await expect(page.getByRole('tab', { name: 'Animals' })).toHaveAttribute('aria-selected', 'true');
   await expect(page.getByRole('tab', { name: 'Bounce back' })).toHaveAttribute('aria-selected', 'true');
 });
