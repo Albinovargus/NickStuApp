@@ -46,32 +46,23 @@ describe('MemoryMatchConfigSchema', () => {
   });
 
   it('rejects a pair with only one card', () => {
-    try {
-      MemoryMatchConfigSchema.parse({ ...validConfig, cards: validConfig.cards.slice(0, 3) });
-      expect.fail('should have thrown');
-    } catch (e: any) {
-      expect(e.errors?.some((err: any) => /Pair "star-1" has 1 card/.test(err.message))).toBeTruthy();
-    }
+    const r = MemoryMatchConfigSchema.safeParse({ ...validConfig, cards: validConfig.cards.slice(0, 3) });
+    expect(r.success).toBe(false);
+    expect(r.error?.issues.map((i) => i.message)).toContain('Pair "star-1" has 1 card; expected 2');
   });
 
   it('rejects a pair with three cards', () => {
     const extra = { id: 'circle-1-c', pairId: 'circle-1', face };
-    try {
-      MemoryMatchConfigSchema.parse({ ...validConfig, cards: [...validConfig.cards, extra] });
-      expect.fail('should have thrown');
-    } catch (e: any) {
-      expect(e.errors?.some((err: any) => /Pair "circle-1" has 3 cards/.test(err.message))).toBeTruthy();
-    }
+    const r = MemoryMatchConfigSchema.safeParse({ ...validConfig, cards: [...validConfig.cards, extra] });
+    expect(r.success).toBe(false);
+    expect(r.error?.issues.map((i) => i.message)).toContain('Pair "circle-1" has 3 cards; expected 2');
   });
 
   it('rejects duplicate card ids', () => {
     const cards = [...validConfig.cards.slice(0, 3), { id: 'star-1-a', pairId: 'star-1', face: face2 }];
-    try {
-      MemoryMatchConfigSchema.parse({ ...validConfig, cards });
-      expect.fail('should have thrown');
-    } catch (e: any) {
-      expect(e.errors?.some((err: any) => /Duplicate card id "star-1-a"/.test(err.message))).toBeTruthy();
-    }
+    const r = MemoryMatchConfigSchema.safeParse({ ...validConfig, cards });
+    expect(r.success).toBe(false);
+    expect(r.error?.issues.map((i) => i.message)).toContain('Duplicate card id "star-1-a"');
   });
 
   it('rejects a bad board size and an unknown face kind', () => {
