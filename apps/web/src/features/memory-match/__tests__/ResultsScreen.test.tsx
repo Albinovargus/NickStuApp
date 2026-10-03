@@ -27,6 +27,11 @@ describe('ResultsScreen', () => {
     expect(rows[1]).toHaveTextContent(/Blue circle\s*4\s*4\s*8\.0s/);
   });
 
+  it('moves focus to the Results heading on mount', () => {
+    render(<ResultsScreen result={result} cards={config.cards} onPlayAgain={vi.fn()} />);
+    expect(screen.getByRole('heading', { name: 'Results' })).toHaveFocus();
+  });
+
   it('calls onPlayAgain', () => {
     const onPlayAgain = vi.fn();
     render(<ResultsScreen result={result} cards={config.cards} onPlayAgain={onPlayAgain} />);

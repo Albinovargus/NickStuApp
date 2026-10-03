@@ -24,8 +24,10 @@ export function MemoryCardTile({ card, position, faceUp, matched, mismatched, on
       data-card-id={card.id}
       data-state={matched ? 'matched' : faceUp ? 'up' : 'down'}
       aria-label={label}
-      disabled={matched}
-      onClick={() => onFlip(card.id)}
+      aria-disabled={matched}
+      onClick={() => {
+        if (!matched) onFlip(card.id);
+      }}
       // The class is removed whenever the card hides, so the shake replays on every new mismatch.
       className={cn(
         'block aspect-[4/5] min-h-11 w-full rounded-xl perspective-normal focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',

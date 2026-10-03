@@ -50,7 +50,12 @@ export function StartScreen({ packs, initialPackId, initialBoardSize, onStart }:
         >
           <TabsList className="w-full">
             {MemoryBoardSizeSchema.options.map((size) => (
-              <TabsTrigger key={size} value={size} className="min-h-11 flex-col gap-0 leading-tight">
+              <TabsTrigger
+                key={size}
+                value={size}
+                aria-label={`${BOARD_SIZES[size].label}, ${BOARD_SIZES[size].pairs} pairs`}
+                className="min-h-11 flex-col gap-0 leading-tight"
+              >
                 <span>{BOARD_SIZES[size].label}</span>
                 <span className="text-xs font-normal text-muted-foreground">{BOARD_SIZES[size].pairs} pairs</span>
               </TabsTrigger>

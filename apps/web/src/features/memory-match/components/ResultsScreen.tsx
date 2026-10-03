@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import type { MemoryCard, MemoryMatchResult } from '@myapp/types';
 import { Button } from '../../../components/ui/button.js';
 import {
@@ -33,11 +34,17 @@ function Stat({ label, value }: { label: string; value: string }) {
 
 export function ResultsScreen({ result, cards, subtitle, onPlayAgain }: ResultsScreenProps) {
   const stats = computeStats(result, cards);
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  useEffect(() => {
+    headingRef.current?.focus();
+  }, []);
 
   return (
     <div className="mx-auto flex max-w-2xl flex-col gap-6 py-4">
       <div className="text-center">
-        <h1 className="text-2xl font-bold">Results</h1>
+        <h1 ref={headingRef} tabIndex={-1} className="text-2xl font-bold outline-none">
+          Results
+        </h1>
         {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
       </div>
 

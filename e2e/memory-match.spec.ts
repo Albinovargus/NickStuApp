@@ -50,9 +50,9 @@ for (const pack of ['Shapes', 'Playing cards', 'Animals']) {
 
     await expect(page.getByRole('heading', { name: 'Results' })).toBeVisible();
     await expect(page.getByText(`${pack} · Small`)).toBeVisible();
-    await expect(tile(page, 'Turns')).toContainText('7');
-    await expect(tile(page, 'Accuracy')).toContainText('86%');
-    await expect(tile(page, 'Memory errors')).toContainText('0');
+    await expect(tile(page, 'Turns').locator('p').first()).toHaveText('7');
+    await expect(tile(page, 'Accuracy').locator('p').first()).toHaveText('86%');
+    await expect(tile(page, 'Memory errors').locator('p').first()).toHaveText('0');
     await expect(page.getByRole('row')).toHaveCount(7);
   });
 }
@@ -96,6 +96,7 @@ test('the home page links to memory match', async ({ page }) => {
 });
 
 test('the large board fits without scrolling', async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 667 });
   await startGame(page, { size: 'Large' });
   await expect(page.getByTestId('memory-card')).toHaveCount(20);
   const overflow = await page.evaluate(() => {
@@ -107,4 +108,29 @@ test('the large board fits without scrolling', async ({ page }) => {
   });
   expect(overflow.horizontal).toBeLessThanOrEqual(0);
   expect(overflow.vertical).toBeLessThanOrEqual(0);
+});
+
+test('no horizontal overflow at 375px on start and results screens', async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 667 });
+  const horizontalOverflow = () =>
+    page.evaluate(() => ({
+      page: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+      main: (() => {
+        const main = document.querySelector('main')!;
+        return main.scrollWidth - main.clientWidth;
+      })(),
+    }));
+
+  await page.goto('/#/modules/memory-match');
+  await expect(page.getByRole('heading', { name: 'Memory Match' })).toBeVisible();
+  const start = await horizontalOverflow();
+  expect(start.page).toBeLessThanOrEqual(0);
+  expect(start.main).toBeLessThanOrEqual(0);
+
+  await startGame(page, { pack: 'Animals', size: 'Large' });
+  await matchAll(page);
+  await expect(page.getByRole('heading', { name: 'Results' })).toBeVisible();
+  const results = await horizontalOverflow();
+  expect(results.page).toBeLessThanOrEqual(0);
+  expect(results.main).toBeLessThanOrEqual(0);
 });

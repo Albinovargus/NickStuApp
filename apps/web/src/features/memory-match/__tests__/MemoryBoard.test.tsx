@@ -20,7 +20,7 @@ describe('MemoryBoard', () => {
       />,
     );
     expect(screen.getByText('Pairs 1 / 3 · Turns 1')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Card 1, Red circle, matched' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'Card 1, Red circle, matched' })).toHaveAttribute('aria-disabled', 'true');
     expect(screen.getByRole('button', { name: 'Card 3, Blue circle' })).toHaveAttribute('data-state', 'up');
     expect(screen.getByRole('button', { name: 'Card 4, face down' })).toHaveAttribute('data-state', 'down');
   });
@@ -30,6 +30,19 @@ describe('MemoryBoard', () => {
     render(<MemoryBoard config={config} order={order} faceUp={[]} matched={[]} turns={0} onFlip={onFlip} />);
     fireEvent.click(screen.getByRole('button', { name: 'Card 5, face down' }));
     expect(onFlip).toHaveBeenCalledWith('circle-3-a');
+  });
+
+  it('keeps matched cards focusable and ignores clicks on them', () => {
+    const onFlip = vi.fn();
+    render(
+      <MemoryBoard config={config} order={order} faceUp={[]} matched={['circle-1-a', 'circle-1-b']} turns={1} onFlip={onFlip} />,
+    );
+    const matchedCard = screen.getByRole('button', { name: 'Card 1, Red circle, matched' });
+    expect(matchedCard).not.toBeDisabled();
+    matchedCard.focus();
+    expect(matchedCard).toHaveFocus();
+    fireEvent.click(matchedCard);
+    expect(onFlip).not.toHaveBeenCalled();
   });
 
   it('shakes both cards of a showing mismatch', () => {
