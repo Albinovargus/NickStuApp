@@ -20,7 +20,7 @@ describe('MemoryBoard', () => {
       />,
     );
     expect(screen.getByText('Pairs 1 / 3 · Turns 1')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Card 1, Red circle, matched' })).toHaveAttribute('aria-disabled', 'true');
+    expect(screen.getByRole('button', { name: 'Card 1, Orange circle, matched' })).toHaveAttribute('aria-disabled', 'true');
     expect(screen.getByRole('button', { name: 'Card 3, Blue circle' })).toHaveAttribute('data-state', 'up');
     expect(screen.getByRole('button', { name: 'Card 4, face down' })).toHaveAttribute('data-state', 'down');
   });
@@ -37,7 +37,7 @@ describe('MemoryBoard', () => {
     render(
       <MemoryBoard config={config} order={order} faceUp={[]} matched={['circle-1-a', 'circle-1-b']} turns={1} onFlip={onFlip} />,
     );
-    const matchedCard = screen.getByRole('button', { name: 'Card 1, Red circle, matched' });
+    const matchedCard = screen.getByRole('button', { name: 'Card 1, Orange circle, matched' });
     expect(matchedCard).not.toBeDisabled();
     matchedCard.focus();
     expect(matchedCard).toHaveFocus();
@@ -49,7 +49,7 @@ describe('MemoryBoard', () => {
     render(
       <MemoryBoard config={config} order={order} faceUp={['circle-1-a', 'circle-2-a']} matched={[]} turns={1} onFlip={vi.fn()} />,
     );
-    expect(screen.getByRole('button', { name: 'Card 1, Red circle' })).toHaveClass('animate-shake');
+    expect(screen.getByRole('button', { name: 'Card 1, Orange circle' })).toHaveClass('animate-shake');
     expect(screen.getByRole('button', { name: 'Card 3, Blue circle' })).toHaveClass('animate-shake');
     expect(screen.getByRole('button', { name: 'Card 2, face down' })).not.toHaveClass('animate-shake');
   });

@@ -23,7 +23,7 @@ describe('ResultsScreen', () => {
     render(<ResultsScreen result={result} cards={config.cards} onPlayAgain={vi.fn()} />);
     const rows = screen.getAllByRole('row').slice(1);
     expect(rows).toHaveLength(6);
-    expect(within(rows[0]!).getByText('Red circle')).toBeInTheDocument();
+    expect(within(rows[0]!).getByText('Orange circle')).toBeInTheDocument();
     expect(rows[1]).toHaveTextContent(/Blue circle\s*4\s*4\s*8\.0s/);
   });
 

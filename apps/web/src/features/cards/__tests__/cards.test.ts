@@ -9,7 +9,7 @@ import {
 describe('decks', () => {
   it('has 12 shape cards with card-sort ids', () => {
     expect(SHAPE_CARDS).toHaveLength(12);
-    expect(SHAPE_CARDS[0]).toEqual({ kind: 'shape', id: 'circle-1', shape: 'circle', color: '#e11d48' });
+    expect(SHAPE_CARDS[0]).toEqual({ kind: 'shape', id: 'circle-1', shape: 'circle', color: '#d55e00' });
   });
 
   it('has 16 animal cards with unique ids', () => {
@@ -26,7 +26,7 @@ describe('decks', () => {
 
 describe('cardFaceLabel', () => {
   it('names shapes by colour', () => {
-    expect(cardFaceLabel(SHAPE_CARDS[0]!)).toBe('Red circle');
+    expect(cardFaceLabel(SHAPE_CARDS[0]!)).toBe('Orange circle');
     expect(cardFaceLabel({ kind: 'shape', id: 'x', shape: 'star', color: '#000000' })).toBe('star');
   });
 

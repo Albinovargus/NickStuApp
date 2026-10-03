@@ -3,7 +3,7 @@ import { SHAPE_COLORS } from './decks.js';
 
 const COLOR_NAMES = new Map(SHAPE_COLORS.map(({ value, name }) => [value, name]));
 
-/** Human-readable name for a card face, e.g. "Red circle", "7 of hearts", "Penguin". */
+/** Human-readable name for a card face, e.g. "Orange circle", "7 of hearts", "Penguin". */
 export function cardFaceLabel(card: SortCard): string {
   switch (card.kind) {
     case 'shape': {

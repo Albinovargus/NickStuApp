@@ -17,10 +17,12 @@ export const SHAPES: { shape: Shape; label: string }[] = [
   { shape: 'star', label: 'Stars' },
 ];
 
+// Okabe–Ito colours: distinguishable with common colour blindness (memory match pairs depend on colour),
+// and at least 3:1 contrast on both the light and dark card backgrounds.
 export const SHAPE_COLORS: { value: string; name: string }[] = [
-  { value: '#e11d48', name: 'Red' },
-  { value: '#2563eb', name: 'Blue' },
-  { value: '#16a34a', name: 'Green' },
+  { value: '#d55e00', name: 'Orange' },
+  { value: '#0072b2', name: 'Blue' },
+  { value: '#cc79a7', name: 'Pink' },
 ];
 
 export const SHAPE_CARDS: ShapeCard[] = SHAPES.flatMap(({ shape }) =>
