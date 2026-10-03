@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { CardSortConfigSchema, type CardSortConfig, type CardSortResult, type SortPile } from '@myapp/types';
 import { isCorrectPlacement } from '../engine/rules.js';
-import { shuffle } from '../engine/deck.js';
+import { shuffle } from '../../cards/index.js';
 import { initialSessionState, sessionReducer, type SessionState } from '../engine/session.js';
 import { computeStats } from '../engine/stats.js';
 import { basicShapesConfig } from '../configs/basic-shapes.js';
