@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useReducer, useRef } from 'react';
 import type { CardSortConfig, CardSortResult } from '@myapp/types';
 import { useHaptics } from '../../../hooks/useHaptics.js';
-import { shuffle } from '../engine/deck.js';
+import { shuffle } from '../../cards/index.js';
 import { isCorrectPlacement } from '../engine/rules.js';
 import { initialSessionState, sessionReducer } from '../engine/session.js';
 

@@ -1,22 +1,7 @@
-import {
-  RankSchema,
-  SuitSchema,
-  type CardSortConfig,
-  type PlayingCard,
-  type Suit,
-  type SortPile,
-  type WrongPlacementMode,
-} from '@myapp/types';
-import { shuffle } from '../engine/deck.js';
+import { RankSchema, SuitSchema, type CardSortConfig, type SortPile, type WrongPlacementMode } from '@myapp/types';
+import { SUIT_LABELS, playingCard, shuffle } from '../../cards/index.js';
 
 const CARDS_PER_SUIT = 4;
-
-const SUIT_LABELS: Record<Suit, string> = {
-  hearts: 'Hearts',
-  diamonds: 'Diamonds',
-  clubs: 'Clubs',
-  spades: 'Spades',
-};
 
 const piles: SortPile[] = SuitSchema.options.map((suit) => ({
   id: `pile-${suit}`,
@@ -29,10 +14,10 @@ export function playingCardsConfig(
   wrongPlacement: WrongPlacementMode,
   random: () => number = Math.random,
 ): CardSortConfig {
-  const cards: PlayingCard[] = SuitSchema.options.flatMap((suit) =>
+  const cards = SuitSchema.options.flatMap((suit) =>
     shuffle(RankSchema.options, random)
       .slice(0, CARDS_PER_SUIT)
-      .map((rank) => ({ kind: 'playing' as const, id: `${suit}-${rank}`, suit, rank })),
+      .map((rank) => playingCard(suit, rank)),
   );
   return { id: 'playing-cards', name: 'Playing cards', piles, cards, wrongPlacement };
 }

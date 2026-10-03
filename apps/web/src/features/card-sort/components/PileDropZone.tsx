@@ -3,8 +3,7 @@ import { useDroppable } from '@dnd-kit/core';
 import { Bird, Fish, PawPrint, Turtle, type LucideIcon } from 'lucide-react';
 import type { AnimalGroup, PileRule, SortPile } from '@myapp/types';
 import { cn } from '../../../lib/utils.js';
-import { ShapeIcon } from './ShapeIcon.js';
-import { SuitSymbol } from './SuitSymbol.js';
+import { ShapeIcon, SuitSymbol } from '../../cards/index.js';
 
 export type PileFeedback = 'correct' | 'wrong' | null;
 
