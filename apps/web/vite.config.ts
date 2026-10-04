@@ -21,18 +21,20 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src'),
+      '@': path.resolve(import.meta.dirname, './src'),
     },
   },
   build: {
     outDir: 'dist',
     sourcemap: true,
-    rollupOptions: {
+    rolldownOptions: {
       output: {
         // React + router change rarely, so they get their own long-cached chunk (and keep the
         // app chunk under Vite's 500 kB warning).
-        manualChunks: {
-          react: ['react', 'react-dom', 'react-dom/client', 'react-router'],
+        codeSplitting: {
+          groups: [
+            { name: 'react', test: /[\\/]node_modules[\\/](react|react-dom|react-router|scheduler)[\\/]/ },
+          ],
         },
       },
     },
