@@ -392,20 +392,21 @@ Claude: Final regression sweep → commit
 | Runtime | Node.js | 24 LTS |
 | Package Manager | pnpm | 12 |
 | Monorepo | Turborepo | 2 |
-| Frontend | React + Vite | 19 + 7 |
+| Language | TypeScript | 6 |
+| Frontend | React + Vite | 19 + 8 |
 | Mobile | Capacitor | 8 |
 | Backend | Fastify | 5 |
 | Database | Supabase (Postgres) | - |
 | Auth | Supabase Auth | - |
 | Storage | Supabase Storage | - |
-| Job Queue | BullMQ + Redis | 5 + 7 |
+| Job Queue | BullMQ + Redis | 6 + 7 |
 | UI Components | shadcn/ui + Radix | - |
 | Styling | Tailwind CSS | 4 |
 | State | Zustand + TanStack Query | 5 + 5 |
-| Validation | Zod | 3 |
-| Error Monitoring | Sentry | 9 |
+| Validation | Zod | 4 |
+| Error Monitoring | Sentry | 11 |
 | Email | Resend (via BullMQ) | - |
-| Testing | Vitest + Playwright | 3 + 1 |
+| Testing | Vitest + Playwright | 5 + 1 |
 | CI/CD | GitHub Actions | - |
 | Deployment | GitHub Pages (web) + Railway (API) | - |
 
