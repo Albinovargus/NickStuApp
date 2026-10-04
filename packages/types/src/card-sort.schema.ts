@@ -105,7 +105,7 @@ export const CardSortResultSchema = z.object({
   configId: z.string().min(1),
   wrongPlacement: WrongPlacementModeSchema,
   cardCount: z.number().int().positive(),
-  startedAt: z.string().datetime(),
+  startedAt: z.iso.datetime(),
   durationMs: z.number().nonnegative(),
   placements: z.array(SortPlacementSchema),
 });

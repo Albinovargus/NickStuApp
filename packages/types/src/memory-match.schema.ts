@@ -24,7 +24,7 @@ export const MemoryMatchConfigSchema = z
     const pairCounts = new Map<string, number>();
     for (const card of config.cards) {
       if (ids.has(card.id)) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['cards'], message: `Duplicate card id "${card.id}"` });
+        ctx.addIssue({ code: 'custom', path: ['cards'], message: `Duplicate card id "${card.id}"` });
       }
       ids.add(card.id);
       pairCounts.set(card.pairId, (pairCounts.get(card.pairId) ?? 0) + 1);
@@ -32,7 +32,7 @@ export const MemoryMatchConfigSchema = z
     for (const [pairId, count] of pairCounts) {
       if (count !== 2) {
         ctx.addIssue({
-          code: z.ZodIssueCode.custom,
+          code: 'custom',
           path: ['cards'],
           message: `Pair "${pairId}" has ${count} card${count === 1 ? '' : 's'}; expected 2`,
         });
@@ -54,7 +54,7 @@ export const MemoryMatchResultSchema = z.object({
   configId: z.string().min(1),
   boardSize: MemoryBoardSizeSchema,
   pairCount: z.number().int().positive(),
-  startedAt: z.string().datetime(),
+  startedAt: z.iso.datetime(),
   durationMs: z.number().nonnegative(),
   flips: z.array(MemoryFlipSchema),
 });
