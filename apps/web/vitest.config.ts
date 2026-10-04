@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src'),
+      '@': path.resolve(import.meta.dirname, './src'),
     },
     // Prefer ESM builds. Under the default `node` condition `react-router` resolves to
     // its CJS build while `react-router/dom` uses the ESM one, giving two Router
