@@ -27,5 +27,14 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     sourcemap: true,
+    rollupOptions: {
+      output: {
+        // React + router change rarely, so they get their own long-cached chunk (and keep the
+        // app chunk under Vite's 500 kB warning).
+        manualChunks: {
+          react: ['react', 'react-dom', 'react-dom/client', 'react-router'],
+        },
+      },
+    },
   },
 });
