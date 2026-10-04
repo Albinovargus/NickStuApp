@@ -389,8 +389,8 @@ Claude: Final regression sweep → commit
 
 | Layer | Technology | Version |
 |-------|-----------|---------|
-| Runtime | Node.js | 22 LTS |
-| Package Manager | pnpm | 9 |
+| Runtime | Node.js | 24 LTS |
+| Package Manager | pnpm | 12 |
 | Monorepo | Turborepo | 2 |
 | Frontend | React + Vite | 19 + 7 |
 | Mobile | Capacitor | 8 |
@@ -469,8 +469,8 @@ After replacing, run `pnpm install` to update the lockfile with your new package
 
 ## Prerequisites
 
-1. **Node.js 22** -- pinned in `.nvmrc`, use `nvm use`
-2. **pnpm 9** -- `corepack enable` to activate
+1. **Node.js 24** -- pinned in `.nvmrc`, use `nvm use`
+2. **pnpm 12** -- pinned in `packageManager`; activate with `npm install -g corepack@latest && corepack enable` (corepack 0.34.5+ is needed for pnpm 11+)
 3. **Docker** -- for Redis and Supabase local dev
 4. **Supabase CLI** -- `brew install supabase/tap/supabase` or [install docs](https://supabase.com/docs/guides/cli/getting-started)
 5. **Xcode** -- iOS development only
@@ -484,7 +484,7 @@ After replacing, run `pnpm install` to update the lockfile with your new package
 
 ```bash
 git clone <repo-url> && cd myapp
-nvm use          # Switch to Node 22
+nvm use          # Switch to Node 24
 corepack enable  # Activate pnpm
 pnpm install
 ```
