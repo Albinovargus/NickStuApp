@@ -42,7 +42,7 @@ export async function getById(id: string) {
 
 ## Registration Order (app.ts)
 
-1. Sentry → 2. Zod provider → 3. CORS → 4. Rate limit → 5. Multipart → 6. Auth plugin → 7. Health → 8. Feature plugins
+1. Sentry → 2. Zod provider → 3. Error handler (must precede every plugin; plugin contexts copy the handler that exists when they load) → 4. CORS → 5. Rate limit → 6. Multipart → 7. Auth plugin → 8. Health → 9. Feature plugins
 
 ## Forbidden
 

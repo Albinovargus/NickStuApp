@@ -13,6 +13,7 @@ vi.mock('../services/upload.service.js', () => ({
   getSignedUrl: vi.fn().mockResolvedValue('https://example.com/signed'),
 }));
 
+import { ApiErrorSchema } from '@myapp/types';
 import { build } from '../app.js';
 import { createTestToken } from './helpers.js';
 
@@ -88,6 +89,19 @@ describe('POST /uploads', () => {
     expect(body.success).toBe(false);
     expect(body.error.code).toBe('BAD_REQUEST');
     expect(body.error.message).toBe('No file provided');
+  });
+
+  it('returns a 400 in the ApiError shape when the query fails schema validation', async () => {
+    const token = await createTestToken();
+    const response = await app.inject({
+      method: 'POST',
+      url: '/uploads?bucket=not-a-bucket',
+      headers: { authorization: `Bearer ${token}` },
+    });
+
+    expect(response.statusCode).toBe(400);
+    const body = ApiErrorSchema.parse(response.json());
+    expect(body.error.message).toMatch(/bucket/i);
   });
 });
 
