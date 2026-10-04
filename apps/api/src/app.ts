@@ -23,39 +23,8 @@ export async function build(opts: { logger?: boolean } = {}) {
   // 2. Zod type provider
   configureZodProvider(app);
 
-  // 3. CORS — register before routes
-  await app.register(cors, {
-    origin: [
-      'http://localhost:5173',
-      process.env['FRONTEND_URL'],
-    ].filter(Boolean) as string[],
-  });
-
-  // 4. Rate limiting — 100 req/min per IP, Redis-backed in production
-  const redisUrl = process.env['REDIS_URL'];
-  await app.register(rateLimit, {
-    max: 100,
-    timeWindow: '1 minute',
-    ...(redisUrl && { redis: new Redis(redisUrl) }),
-  });
-
-  // 5. Multipart — 10MB file size limit
-  await app.register(multipart, {
-    limits: { fileSize: 10 * 1024 * 1024 },
-  });
-
-  // 6. Auth plugin — decorates request.user, registers fastify.authenticate
-  await app.register(authPlugin);
-
-  // 7. Health check (no auth)
-  await app.register(healthPlugin);
-
-  // 8. Feature plugins
-  await app.register(usersPlugin);
-  await app.register(uploadsPlugin);
-  await app.register(authCallbackPlugin);
-
-  // 9. Global error handler — matches ApiErrorSchema contract
+  // 3. Global error handler — matches ApiErrorSchema contract. Set before any plugin is
+  //    registered: each plugin context copies the error handler that exists when it loads.
   app.setErrorHandler((error: { statusCode?: number; code?: string; message: string }, _request, reply) => {
     const statusCode = error.statusCode ?? 500;
     if (statusCode >= 500) {
@@ -69,6 +38,38 @@ export async function build(opts: { logger?: boolean } = {}) {
       },
     });
   });
+
+  // 4. CORS — register before routes
+  await app.register(cors, {
+    origin: [
+      'http://localhost:5173',
+      process.env['FRONTEND_URL'],
+    ].filter(Boolean) as string[],
+  });
+
+  // 5. Rate limiting — 100 req/min per IP, Redis-backed in production
+  const redisUrl = process.env['REDIS_URL'];
+  await app.register(rateLimit, {
+    max: 100,
+    timeWindow: '1 minute',
+    ...(redisUrl && { redis: new Redis(redisUrl) }),
+  });
+
+  // 6. Multipart — 10MB file size limit
+  await app.register(multipart, {
+    limits: { fileSize: 10 * 1024 * 1024 },
+  });
+
+  // 7. Auth plugin — decorates request.user, registers fastify.authenticate
+  await app.register(authPlugin);
+
+  // 8. Health check (no auth)
+  await app.register(healthPlugin);
+
+  // 9. Feature plugins
+  await app.register(usersPlugin);
+  await app.register(uploadsPlugin);
+  await app.register(authCallbackPlugin);
 
   // 10. Start background job workers
   const workers = startEmailWorkers();
